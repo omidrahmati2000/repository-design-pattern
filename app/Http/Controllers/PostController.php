@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Repositories\PosRepository;
 use App\Services\PostService;
 use Illuminate\Http\Request;
-use Mockery\Exception;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class PostController extends Controller
 {
@@ -13,7 +15,6 @@ class PostController extends Controller
 
     public function __construct(PostService $postService)
     {
-        dd(2);
         $this->postService = $postService;
     }
 
@@ -24,17 +25,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        dd(1);
-    }
+        $result = ['status' => 200];
+        try {
+            $result['data'] = $this->postService->getAll();
+        } catch (Throwable $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($result, $result['status']);
     }
 
     /**
@@ -45,7 +46,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-//        dd(1);
         $data = $request->only([
             'title',
             'description'
@@ -54,9 +54,8 @@ class PostController extends Controller
         $result = ['status' => 200];
 
         try {
-            dd(1);
             $result['data'] = $this->postService->savePostData($data);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $result = [
                 'status' => 500,
                 'error' => $e->getMessage()
@@ -78,26 +77,30 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->only([
+            'title',
+            'description'
+        ]);
+        $result = ['status' => 200];
+        try {
+            $result['data'] = $this->postService->updatePost($data, $id);
+        } catch (Throwable $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+
     }
 
     /**
@@ -106,8 +109,18 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        $result = ['status' => 200];
+        try {
+            $result['data'] = $this->postService->deleteById($id);
+        } catch (Throwable $t) {
+            $result = [
+                'status' => 500,
+                'error' => $t->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }
