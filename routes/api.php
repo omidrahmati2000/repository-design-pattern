@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('post', \App\Http\Controllers\PostController::class);
+Route::post('/post/update/{id}', [\App\Http\Controllers\PostController::class, 'update']);

@@ -24,14 +24,7 @@ class PostController extends Controller
     public function index()
     {
         $result = ['status' => 200];
-        try {
-            $result['data'] = $this->postService->all();
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'error' => $e->getMessage()
-            ];
-        }
+        $result['data'] = $this->postService->all();
 
         return response()->json($result, $result['status']);
     }
@@ -46,14 +39,7 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $result = ['status' => 200];
-        try {
-            $result['data'] = $this->postService->save($data);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'error' => $e->getMessage()
-            ];
-        }
+        $result['data'] = $this->postService->save($data);
 
         return response()->json($result, $result['status']);
     }
@@ -80,14 +66,7 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $result = ['status' => 200];
-        try {
-            $result['data'] = $this->postService->update($data, $id);
-        } catch (Throwable $e) {
-            $result = [
-                'status' => 500,
-                'error' => $e->getMessage()
-            ];
-        }
+        $result['data'] = $this->postService->update($data, $id);
 
         return response()->json($result, $result['status']);
 
@@ -102,14 +81,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $result = ['status' => 200];
-        try {
-            $result['data'] = $this->postService->delete($id);
-        } catch (Throwable $t) {
-            $result = [
-                'status' => 500,
-                'error' => $t->getMessage()
-            ];
-        }
+        $result['data'] = $this->postService->delete($id);
 
         return response()->json($result, $result['status']);
     }
