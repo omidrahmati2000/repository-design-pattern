@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Services\PostServiceInterface;
-use Throwable;
 
 class PostController extends Controller
 {
-    protected $postService;
+    protected PostServiceInterface $postService;
 
     public function __construct(PostServiceInterface $postService)
     {

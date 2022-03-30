@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Repositories\PostRepositoryInterface;
 
-class PostService implements PostServiceInterface
+class PostService implements PostRepositoryInterface
 {
     protected $postRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
-    {
-        $this->postRepository = $postRepository;
-    }
+//    public function __construct(PostRepositoryInterface $postRepository)
+//    {
+//        $this->postRepository = $postRepository;
+//    }
 
     public function save($data)
     {
