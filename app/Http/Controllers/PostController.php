@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use App\Repositories\PosRepository;
-use App\Services\PostService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\PostServiceInterface;
 use Throwable;
 
 class PostController extends Controller
 {
     protected $postService;
 
-    public function __construct(PostService $postService)
+    public function __construct(PostServiceInterface $postService)
     {
         $this->postService = $postService;
     }
@@ -27,7 +25,7 @@ class PostController extends Controller
     {
         $result = ['status' => 200];
         try {
-            $result['data'] = $this->postService->getAll();
+            $result['data'] = $this->postService->all();
         } catch (Throwable $e) {
             $result = [
                 'status' => 500,
@@ -44,17 +42,12 @@ class PostController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $data = $request->only([
-            'title',
-            'description'
-        ]);
-
+        $data = $request->validated();
         $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->postService->savePostData($data);
+            $result['data'] = $this->postService->save($data);
         } catch (Throwable $e) {
             $result = [
                 'status' => 500,
@@ -83,15 +76,12 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        $data = $request->only([
-            'title',
-            'description'
-        ]);
+        $data = $request->validated();
         $result = ['status' => 200];
         try {
-            $result['data'] = $this->postService->updatePost($data, $id);
+            $result['data'] = $this->postService->update($data, $id);
         } catch (Throwable $e) {
             $result = [
                 'status' => 500,
@@ -113,7 +103,7 @@ class PostController extends Controller
     {
         $result = ['status' => 200];
         try {
-            $result['data'] = $this->postService->deleteById($id);
+            $result['data'] = $this->postService->delete($id);
         } catch (Throwable $t) {
             $result = [
                 'status' => 500,

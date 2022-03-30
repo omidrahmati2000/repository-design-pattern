@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Post;
+use InvalidArgumentException;
 
-class PosRepository
+class PosRepository implements PostRepositoryInterface
 {
     protected $post;
 
@@ -24,7 +25,7 @@ class PosRepository
         return $post->fresh();
     }
 
-    public function getAllPost()
+    public function all()
     {
         return $this->post->get();
     }
@@ -32,6 +33,11 @@ class PosRepository
     public function update($data, $id)
     {
         $post = $this->post->find($id);
+
+        if (!isset($post)){
+            throw new InvalidArgumentException('Unable to update post data');
+        }
+
         $post->title = $data['title'];
         $post->description = $data['description'];
         $post->update();
@@ -41,6 +47,11 @@ class PosRepository
 
     public function delete($id){
         $post = $this->post->find($id);
+
+        if (!isset($post)){
+            throw new InvalidArgumentException('unable to delete post data');
+        }
+
         $post->delete();
 
         return $post;
