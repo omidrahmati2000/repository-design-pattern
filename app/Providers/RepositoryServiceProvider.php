@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+
 use App\Repositories\PosRepository;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
