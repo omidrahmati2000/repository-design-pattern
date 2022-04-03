@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\PostCreate;
 use App\Repositories\PostRepositoryInterface;
 
 class PostService implements PostServiceInterface
@@ -15,7 +16,9 @@ class PostService implements PostServiceInterface
 
     public function save($data)
     {
-        return $this->postRepository->save($data);
+        $post = $this->postRepository->save($data);
+        event(new PostCreate($post));
+        return $post;
     }
 
     public function all()
