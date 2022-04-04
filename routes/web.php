@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return 1;
+    return view('welcome');
+});
+
+Route::get('/test', function () {
+    event(new \App\Events\PostCreate());
+    dd('Event fired.');
 });
